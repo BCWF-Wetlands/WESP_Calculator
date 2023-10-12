@@ -1,5 +1,5 @@
 # WESP_Calculator
-R code to interact with excel based WESP calculator
+R code to extract excel based WESP calculator input data and Survey 123 WESP field app data.
 
 ============================
 
@@ -28,7 +28,6 @@ There are a set of scripts that help load data from WESP Calculator excel spread
 Control scripts - set up the analysis environment;   
 Load scripts - loads excel and survey 123 data;   
 Clean scripts - cleans loaded data and generates a single EcoProvince data set;   
-Output scripts - outputs collated data.
 
 #Control Scripts:   
 run_all.R	Sets local variables and directories used by scripts, presents script order.  
@@ -44,9 +43,6 @@ Clean_BatchCalculator_Stressor.R
 Load_Survey123.R  
 Clean_Survey123_Function.R  
 Clean_Survey123_Stressor.R
-
-#Output   
-Output_WESP_Data.R 
 
 ### Project Status
 
