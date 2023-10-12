@@ -14,6 +14,14 @@ The input excel WESP Spreadsheet requires some minor formatting changes to be ma
 2. Adding a column indicating question and sub-questions, for example the row describing OF32 becomes OF32_0 and the individual OF32 questions become OF32_1, OF32_2 and OF32_3.   
 3. The first row, specifically the "F" and "S" sheets are modified so that every column has a heading.
     
+Some modifications are also required to make the Survey 123 form output, which is in csv, more machine readable and cleaner, they are as follows:  
+1. Fix the date field in excel by creating a new field with a text date (eg =TEXT(D3,"d/m/yy")).  
+2. Delete fields L and M – they are empty and repeated in columns DD and DE but have data.  
+3. Add a row that has labels corresponding to question number (F1_1 to F60) and the ancillary information (Wetland_Co, date, etc). Older versions of the form with this modification are in the sync and the row should copy and paste into the new spreadsheet. 
+4. Note that the form generates a few extra rows – F45_1.1, F46_1.1, F46_1.2 and F60_1. As well, Wetland_CoIn is used to track some of the odd Form Wetland_Co values. 
+5. Check the 'Region' column and ensure consistent assignment of Region - this is used for selecting data and only EcoProvince abbreviations are acceptable (currently: GD, CM, SIM, BP, TP, SB, SI). The Wetland_Co column and investigator columns can be used to confirm Region assignment.  
+6. Clean up the 'ph column'pH measurement' column so that it contains only 1 numeric entry. 
+
 ### Usage
 
 There are a set of scripts that help load data from WESP Calculator excel spreadsheet and from the Survey 123 WESP protocol applicationn there are four basic sets of scripts:    

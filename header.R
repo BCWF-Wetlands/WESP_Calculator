@@ -5,6 +5,7 @@ library(tidyr)
 library(WriteXLS)
 library(readxl)
 library(stringr)
+library(gtools)
 
 OutDir <- 'out'
 dataOutDir <- file.path(OutDir,'data')

@@ -13,22 +13,23 @@
 #Select each wetland, then each question and create a 3 dimension table - resulting in a list of wetland,
 # with a dataframe of question and sub-questions
 #Office case
-nQs<-44
+nQs<-45
 Qlist<-c(paste0('OF',(2:(nQs)),'_'))
 max_length<-11 #maximum number of sub-questions + OF#_0
 
 #Loop through each wetland
-wetOF<-lapply(1:length(WetList), function(y) {
+wetOF<-lapply(1:length(BWetList), function(y) {
 #Single wetland
 wet1<-WESPclean[[2]] %>% #single sheet - OF
-  dplyr::select(OF_Question,WetList[[y]])
+  dplyr::select(OF_Question,BWetList[[y]])
 
 #make each question it's own list
   wet1Q<-lapply(1:length(Qlist), function(x) {
     df1<-wet1 %>%
       dplyr::filter(str_detect(OF_Question, Qlist[x]))
     wetP<-df1[[2]]
-    df2<- data.frame(c(wetP[2:length(wetP)],rep(NA,max_length - length(wetP))))
+    df2<- data.frame(c(wetP[2:length(wetP)],rep(0,max_length - length(wetP)))) %>%
+      replace(is.na(.), 0) #set all NA to 0
     names(df2)[1]<-strsplit(df1$OF_Question[[1]], "[_]")[[1]][1]
     return(df2)
   })
@@ -37,5 +38,5 @@ wet1<-WESPclean[[2]] %>% #single sheet - OF
 df3<-do.call(cbind, wet1Q)
 
 })
-#Generates a list of wetlands, as a dataframe of questions x sub-questions
-#wetOF
+#Name each list element (wetland)
+names(wetOF)<-wetNameBF

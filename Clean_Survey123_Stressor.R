@@ -10,11 +10,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-source('header.R')
-
-#Clean up the Survey123 data
-WFormS<-WForm %>%
-  dplyr::select(Batch_ID,Wetland_Co, Wetland_CoIn, Investigators, Date,
+#Read in loaded Survey 123 data
+WFormS<-read_excel(file.path(dataOutDir,paste('WFormIn.xlsx',sep='')),
+                   col_names=TRUE, col_types=c('text')) %>%
+  dplyr::select(Wetland_Co,
                 starts_with('S')) %>%
   mutate(across(everything(), as.character))
 
@@ -36,6 +35,7 @@ SplitFn1 <- function(i,df) {
         is.element(j, VpartsN) ~ 1,
         TRUE ~ 0)) %>%
       dplyr::select(!!rlang::sym(FormVName))
+      #dplyr::select(Wetland_Co,!!rlang::sym(FormVName))
   })
   do.call(cbind, df2)
 }
@@ -46,15 +46,23 @@ df3<-lapply(1:length(ParseVars), function(x) {
     rowwise() %>%
     mutate(Vparts=(strsplit(!!rlang::sym(ParseVars[x]), ","))) %>%
     mutate(VpartsN=list(parse_number(Vparts))) %>%
+    #dplyr::select(Wetland_Co,(ParseVars[x]),Vparts,VpartsN)
     dplyr::select((ParseVars[x]),Vparts,VpartsN)
   #SplitFn1(x,df1$VpartsN)
   SplitFn1(x,df1)
+  #return(df1)
 })
+#Data Check
+df3tt<-df3[[1]]
+#df4<-df3 %>%
+#  dplyr::select(-c)
 
 #Combine generated form sub-variables with original data.frame
 WFormS2 <- cbind(WFormS,(do.call(cbind, df3))) %>%
   mutate(across(everything(), as.character))
 
+WFormS2Check<-WFormS2 %>%
+  dplyr::select(Wetland_Co,c(paste0('S5_',(1:12))))
 
 #Split out form binary variables that are contained in 1 variable
 ParseVars<-c('S1_11','S1_12','S1_13','S1_14','S2_6','S2_7','S2_8','S3_10','S3_11','S3_12',
@@ -63,45 +71,51 @@ ParseVars<-c('S1_11','S1_12','S1_13','S1_14','S2_6','S2_7','S2_8','S3_10','S3_11
 WFormS3<-WFormS2 %>%
   mutate(across(all_of(ParseVars), parse_number)) %>%
   mutate(across(everything(), as.character)) %>%
-  dplyr::select(Wetland_Co, Batch_ID,
+  dplyr::select(Wetland_Co,
                 S1, starts_with('S1_'),S2, starts_with('S2_'),
                 S3, starts_with('S3_'),S4, starts_with('S4_'),
                 S5, starts_with('S5_'),S6, starts_with('S6_'))
 StressCols<-colnames(WFormS3)
 
-#WriteXLS(WFormS3,file.path(dataOutDir,paste('WetlandStress_2021_PlotData_12May2023.xlsx',sep='')),AllText=TRUE)
+WFormS3Check<-WFormS3 %>%
+  dplyr::select(Wetland_Co,c(paste0('S5_',(1:12))))
 
-#Column join 2020 with 2021
-#Transform 2020 data so can join with 2021 - then can transpose in excel back to original format
-#Done in plot_01_load_2021.R
-#WFormStress2020T<-data.frame(t(WFormStress2020))
-#Get the column names from the first row then delete row
-#colnames(WFormStress2020T)=WFormStress2020T[c(1),]
-#WFormStress2020T<-WFormStress2020T[-1,]
-#colnames(WFormStress2020T)
-#Set all types to character - same as WForm
-#Set Batch_ID and get Wetland_Co from Paul's SiteID_xtab file
-#WFormStress2020T <- WFormStress2020T %>%
-#  mutate(Batch_ID=parse_number(rownames(WFormStress2020T))) %>%
-#  left_join(SiteID_xtab) %>%
-#  mutate(across(everything(), as.character))
-#WFormStress2020T$Wetland_Co <- rownames(WFormStress2020T)
-#WriteXLS(WManual2020T,file.path(dataOutDir,paste('WManual2020T.xlsx',sep='')),AllText=TRUE)
+WriteXLS(WFormS3,file.path(dataOutDir,paste('WFormS3.xlsx',sep='')),
+         row.names=FALSE,col.names=TRUE,AllText=TRUE)
 
-#Join the data together and write as excel spreadsheet
-WetlandStressPlotData1<-WFormStress2020T %>%
-  #dplyr::select(StressCols) %>%
-  dplyr::bind_rows(WFormS3)  #%>%
-#dplyr::select(Wetland_Co,Batch_ID,
-#             S1, S1_1,S1_2,S1_3,S1_4,S1_5,S1_6,S1_7,S1_8,S1_9,S1_10,starts_with('S1_'),
-#             S2, S2_1,S2_2,S2_3,S2_4,S2_5,S2_6,S2_7,S2_8,S2_9,S2_10,
-#             S3, S3_1,S3_2,S3_3,S3_4,S3_5,S3_6,S3_7,S3_8,S3_9,S3_10,starts_with('S3_'),
-#             S4, S4_1,S4_2,S4_3,S4_4,S4_5,S4_6,S4_7,
-#             S5, S5_1,S5_2,S5_3,S5_4,S5_5,S5_6,S5_7,S5_8,S5_9,S5_10,starts_with('S5_'),
-#             S6, S6_1,S6_2,S6_3,S6_4)
-#Neaten up the data frame and transpose for export
-WetlandStressPlotData<-data.frame(t(WetlandStressPlotData1))
+#Cast data into same data structure as Batch Calculator
+#Select each wetland, then each question and create a 3 dimension table - resulting in a list of wetland,
+# with a data frame of question and sub-questions
+#Field case
+nQs<-6
+Qlist<-c(paste0('S',(1:(nQs)),'_'))
+max_length<-14 #maximum number of sub-questions
+wetName123<-WFormS3$Wetland_Co
+#Loop through each wetland
+wetSS123<-lapply(1:length(wetName123), function(y) {
+  #Single wetland
+  wet1<-as.data.frame(t(rbind(names(WFormS3[y,]),WFormS3[y,])),stringsAsFactors=F)
+  colnames(wet1)<-c('F_Question',wet1[1,2])
+  wet1a<-wet1[-1,]
+  wet1<-wet1a[gtools::mixedorder(wet1a$F_Question),]
+  rownames(wet1)<-1:nrow(wet1)
+  #make each question it's own list
+  wet1Q<-lapply(1:length(Qlist), function(x) {
+    df1<-wet1 %>%
+      dplyr::filter(str_detect(F_Question, Qlist[x])) %>%
+      replace(is.na(.), 0)
+    wetP<-df1[[2]]
+    #changed from index of 2 to 1 since no F#_0s in survey 123 vs load from Batch
+    df2<- data.frame(c(wetP[1:length(wetP)],rep(NA,max_length - length(wetP))))
+    names(df2)[1]<-strsplit(df1$F_Question[[1]], "[_]")[[1]][1]
+    print(x)
+    return(df2)
+  })
 
-WriteXLS(WetlandStressPlotData,file.path(dataOutDir,paste('WetlandStressPlotData_05June2023.xlsx',sep='')),
-         row.names=TRUE,col.names=FALSE,AllText=TRUE)
+  #Combine all the questions for a single wetland
+  df3<-do.call(cbind, wet1Q)
+})
+#Name each list element (wetland)
+names(wetSS123)<-wetName123
 
+wetSS123Check<-wetSS123[["ESI-32955"]] #Batch ID 13
