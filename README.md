@@ -24,7 +24,7 @@ Some modifications are also required to make the Survey 123 form output, which i
 
 ### Usage
 
-There are a set of scripts that help load data from WESP Calculator excel spreadsheet and from the Survey 123 WESP protocol applicationn there are four basic sets of scripts:    
+There are a set of scripts that help load data from WESP Calculator excel spreadsheet and from the Survey 123 WESP protocol applicationn there are three basic sets of scripts:    
 Control scripts - set up the analysis environment;   
 Load scripts - loads excel and survey 123 data;   
 Clean scripts - cleans loaded data and generates a single EcoProvince data set;   
