@@ -11,33 +11,44 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 #Read sampling spreadsheet sheets
-BatchCalcFile<-'BC_BatchCalculator_Skeena_18Jy2023_ModelsRevised_30Aug2023update_05Oct2023.xlsm'
 WetPlotFnSheets<- excel_sheets(file.path(DataDir,paste0(BatchCalcFile)))
 
 #Define sheets to read
 WESPinSheets<-c('F','OF','S')
+BWetList<-(1:numSites)
+
 #Read in the Batch Calculator sheets
 WESPin<-lapply(1:3, function(x) {
-  read_excel(file.path(DataDir,paste0(BatchCalcFile)),
+  dfin<-read_excel(file.path(DataDir,paste0(BatchCalcFile)),
              sheet = WESPinSheets[x],
              col_names=TRUE, col_types=c('text'))
+  #Drop un-needed columns
+  df<-dfin %>%
+    dplyr::select(!any_of(c('Indicator','Description','Condition Choices','Severe','Medium','Mild')))
+  #drop the calculating column - it's a repeat of a column held in data
+  df<-df[-2]
+  #Rename the columns so they have clean 1:100 names
+  colnames(df)<-c(paste0(WESPinSheets[x],'_Question'),1:100)
+  return(df)
 })
 
-nSites<-length(WESPin[[1]])-4
 #Read in Paul's Wetland_Co look up table so can assign consistent IDs
 #This is needed to combine 2020 and 2021 survey 123 data
 SiteID_xtab<-read_excel(file.path(DataDir,'SiteID_xtab_2023.xlsx'),
                         skip=1,
                         col_names=c('Batch_ID','Wetland_Co'))
+#If need to add sites
 #Batch_ID_max<-max(SiteID_xtab$Batch_ID)wetName<-WetPlotFnSheets$Wetland_Co
+
 wetNameBF<-SiteID_xtab$Wetland_Co
 #Clean up Batch Calculator Data sheets so reduced to question and data
 WESPclean<-lapply(1:3, function(x) {
-  cnames<-c(paste0(WESPinSheets[x],"_Question"),c(paste0('X',(1:(nSites)))))
-  as.data.frame(WESPin[x]) %>% dplyr::select(all_of(cnames))
+  cnames<-c(paste0(WESPinSheets[x],"_Question"),as.character(c(paste0((1:(nSites))))))
+  Question<-paste0(WESPinSheets[x],"_Question")
+  df<-as.data.frame(WESPin[[x]]) %>% dplyr::select(all_of(cnames)) %>%
+  dplyr::filter(!(str_detect(!!sym(Question), "^Drop"))) #drop the 'Drop#' columns
+  return(df)
 })
 
 #List of sites for indexing in clean scripts
-BWetList<-c(paste0('X',(1:(ncol(WESPclean[[1]])-1))))
-
-
+#BWetList<-c(paste0('X',(1:(ncol(WESPclean[[1]])-1))))
