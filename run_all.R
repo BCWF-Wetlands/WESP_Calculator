@@ -14,7 +14,7 @@ source("header.R")
 
 #Set the EcoProvince and name of the Survey 123 file name - it needs to be in the 'data' directory
 EcoP<-'CM'
-BatchCalcFile<-'BC_BatchCalculator_ModelsRevised_17Oct2023_wColumns.xlsm'
+BatchCalcFile<-'BC_BatchCalculator_ModelsRevised_18Oct2023_wColumns.xlsm'
 BCWFfile<-'WESP_06_24_0_export02.23_06Oct2023.xlsx'
 numSites<-100
 
@@ -25,7 +25,7 @@ source("Clean_BatchCalculator_Office.R")
 source("Clean_BatchCalculator_Stressor.R")
 #Combine each of the cleaned Batch Calculator pieces into a single list
 wetBatch<-list(wetOF,wetF,wetS)
-
+source("Clean_BatchCalculator_Flat.R")
 #Loading and cleaning Survey 123 data
 #Need to reconcile 'Region' field prior to loading to ensure proper EcoProv site selection
 # this is used for selecting data and only EcoProvince abbreviations are acceptable
@@ -37,6 +37,3 @@ source("Clean_Survey123_Function.R")
 source("Clean_Survey123_Stressor.R")
 #Combine each of the cleaned Survey123 pieces into a single list
 wetS123<-list(wetFS123,wetSS123)
-
-#Output
-source("Outut_WESP_Data.R")

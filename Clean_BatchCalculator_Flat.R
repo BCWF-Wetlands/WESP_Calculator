@@ -17,7 +17,10 @@ wetAll<-lapply(1:length(WESPclean), function(x) {
   wet1b<-WESPclean[[x]] %>% #single sheet
     dplyr::select(Question=ends_with('Question'),as.character(all_of(BWetList))) %>%
     #drop all non data rows e.g F#_0
-    dplyr::filter(!str_detect(Question, "_0|_A|_B|_a|_b|_c|_d|_e")) %>%
+    #dplyr::filter(!str_detect(Question, "_0|_A |_B |_a|_b|_c|_d|_e")) %>%
+    #dplyr::filter(!str_detect(Question, "_0|_a|_b|_c|_d|_e"),c('F2_A','F2_B')) %>%
+    dplyr::filter(!str_detect(Question, "_0|_a|_b|_c|_d|_e")) %>%
+    dplyr::filter(!Question==c('F2_A','F2_B')) %>%
     replace(is.na(.), 0) #set all NA to 0
   return(wet1b)
 })

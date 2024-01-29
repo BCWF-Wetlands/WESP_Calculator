@@ -19,19 +19,19 @@ max_length<-11 #maximum number of sub-questions + F#_0
 
 #Loop through each wetland
 wetF<-lapply(1:length(BWetList), function(y) {
-#Single wetland
+    #Single wetland
 wet1b<-WESPclean[[1]] %>% #single sheet - F
-  dplyr::select(F_Question,BWetList[[y]]) %>%
+  dplyr::select(F_Question,as.character(BWetList[[y]])) %>%
   #drop all non data rows e.g F#_0
   dplyr::filter(!(str_detect(F_Question, "_0|_A|_B"))) %>%
   replace(is.na(.), 0) #set all NA to 0
 
 #make each question it's own list
-  wet1Q<-lapply(1:length(Qlist), function(x) {
+wet1Q2<-lapply(1:length(Qlist), function(x) {
     df1<-wet1b %>%
-      dplyr::filter(str_detect(F_Question, Qlist[x]))
+      dplyr::filter(str_detect(as.character(F_Question), Qlist[x]))
     # makes a list for each question with possible responses
-    wetP<-df1[[2]]
+    #wetP<-df1[[2]]
   #  df2<- data.frame(c(wetP[2:length(wetP)],rep(0,max_length - length(wetP)))) %>%
   #    replace(is.na(.), 0) #set all NA to 0
   #  names(df2)[1]<-strsplit(df1$F_Question[[1]], "[_]")[[1]][1]

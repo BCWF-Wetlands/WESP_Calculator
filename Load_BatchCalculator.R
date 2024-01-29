@@ -26,7 +26,7 @@ WESPin<-lapply(1:3, function(x) {
   df<-dfin %>%
     dplyr::select(!any_of(c('Indicator','Description','Condition Choices','Severe','Medium','Mild')))
   #drop the calculating column - it's a repeat of a column held in data
-  df<-df[-2]
+  #df<-df[-2]
   #Rename the columns so they have clean 1:100 names
   colnames(df)<-c(paste0(WESPinSheets[x],'_Question'),1:100)
   return(df)
@@ -43,7 +43,7 @@ SiteID_xtab<-read_excel(file.path(DataDir,'SiteID_xtab_2023.xlsx'),
 wetNameBF<-SiteID_xtab$Wetland_Co
 #Clean up Batch Calculator Data sheets so reduced to question and data
 WESPclean<-lapply(1:3, function(x) {
-  cnames<-c(paste0(WESPinSheets[x],"_Question"),as.character(c(paste0((1:(nSites))))))
+  cnames<-c(paste0(WESPinSheets[x],"_Question"),as.character(c(paste0((1:(numSites))))))
   Question<-paste0(WESPinSheets[x],"_Question")
   df<-as.data.frame(WESPin[[x]]) %>% dplyr::select(all_of(cnames)) %>%
   dplyr::filter(!(str_detect(!!sym(Question), "^Drop"))) #drop the 'Drop#' columns

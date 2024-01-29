@@ -21,7 +21,7 @@ max_length<-19 #maximum number of sub-questions + OF#_0
 wetS<-lapply(1:length(BWetList), function(y) {
 #Single wetland
 wet1<-WESPclean[[3]] %>% #single sheet - OF
-  dplyr::select(S_Question,BWetList[[y]]) %>%
+  dplyr::select(S_Question,as.character(BWetList[[y]])) %>%
   dplyr::filter(!grepl("a|b|c|d|e",S_Question))
 
 #make each question it's own list
