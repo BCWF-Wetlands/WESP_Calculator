@@ -14,7 +14,8 @@ source("header.R")
 
 #Set the EcoProvince and name of the Survey 123 file name - it needs to be in the 'data' directory
 EcoP<-'CM'
-BatchCalcFile<-'BC_BatchCalculator_ModelsRevised_18Oct2023_wColumns.xlsm'
+#BatchCalcFile<-'BC_BatchCalculator_ModelsRevised_18Oct2023_wColumns.xlsm'
+BatchCalcFile<-'Copy of BC_BatchCalculator_ModelsRevised_17Jan2024_wColumns.xlsm'
 BCWFfile<-'WESP_06_24_0_export02.23_06Oct2023.xlsx'
 numSites<-100
 

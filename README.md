@@ -13,6 +13,7 @@ The input excel WESP Spreadsheet requires some minor formatting changes to be ma
 1. Modify the '#' column - change its name to 'OF_Quesiton', 'F_Question' or 'S_Question. Add sub-questions to rows, for example the row describing OF32 becomes OF32_0 and the individual OF32 questions become OF32_1, OF32_2 and OF32_3. As well, un-merge rows.  
 2. The first row, specifically the "F" and "S" sheets are modified so that every column has a heading.  
 3. Label all rows to be dropped as 'Drop#', including any empty rows at bottom of sheet where there is another row containing the Wetland_Co data, and those rows that were merged that contain further OF directions.   
+4. Delete the single calculator column at the begining of the data columns.
 
 Some modifications are also required to make the Survey 123 form output, which is in csv, more machine readable and cleaner, they are as follows:  
 1. Fix the date field in excel by creating a new field with a text date (eg =TEXT(D3,"d/m/yy")).  
