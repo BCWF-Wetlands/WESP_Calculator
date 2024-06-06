@@ -354,8 +354,8 @@ display: none;
 
 <div id="wesp_calculator" class="section level1">
 <h1>WESP_Calculator</h1>
-<p>R code to extract excel based WESP calculator input data and Survey
-123 WESP field app data.</p>
+<p>R code to process Survey 123 WESP field app data and Office question
+data to generate wetland ecosystem services scores</p>
 <p>============================</p>
 <p>The B.C. Wildlife Federation’s Wetlands Workforce project is a
 collaboration with conservation organizations and First Nations working
@@ -363,67 +363,46 @@ to maintain and monitor wetlands across British Columbia. <a href="https://bcwf.
 <p>WESP - Wetland Ecosystem Services Protocol</p>
 <div id="data" class="section level3">
 <h3>Data</h3>
-<p>The input excel WESP Spreadsheet requires some minor formatting
-changes to be machine readable.<br />
-1. Modify the ‘#’ column - change its name to ‘OF_Quesiton’,
-‘F_Question’ or ‘S_Question. Add sub-questions to rows, for example the
-row describing OF32 becomes OF32_0 and the individual OF32 questions
-become OF32_1, OF32_2 and OF32_3. As well, un-merge rows.<br />
-2. The first row, specifically the “F” and “S” sheets are modified so
-that every column has a heading.<br />
-3. Label all rows to be dropped as ’Drop#’, including any empty rows at
-bottom of sheet where there is another row containing the Wetland_Co
-data, and those rows that were merged that contain further OF
-directions.<br />
-4. Delete the single calculator column at the begining of the data
-columns.</p>
-<p>Some modifications are also required to make the Survey 123 form
-output, which is in csv, more machine readable and cleaner, they are as
+<p>Some modifications are required to make the Survey 123 form output,
+which is in csv, more machine readable and cleaner, they are as
 follows:<br />
 1. Fix the date field in excel by creating a new field with a text date
 (eg =TEXT(D3,“d/m/yy”)).<br />
-2. Delete fields L and M – they are empty and repeated in columns DD and
-DE but have data.<br />
-3. Add a row that has labels corresponding to question number (F1_1 to
-F60) and the ancillary information (Wetland_Co, date, etc). Older
-versions of the form with this modification are in the sync and the row
-should copy and paste into the new spreadsheet.<br />
-4. Note that the form generates a few extra rows – F45_1.1, F46_1.1,
-F46_1.2 and F60_1. As well, Wetland_CoIn is used to track some of the
-odd Form Wetland_Co values.<br />
-5. Check the ‘Region’ column and ensure consistent assignment of Region
+2. Check the ‘Region’ column and ensure consistent assignment of Region
 - this is used for selecting data and only EcoProvince abbreviations are
 acceptable (currently: GD, CM, SIM, BP, TP, SB, SI). The Wetland_Co
 column and investigator columns can be used to confirm Region
 assignment.<br />
-6. Clean up the ‘ph column’pH measurement’ column so that it contains
-only 1 numeric entry.</p>
+3. Clean up the ‘ph column’pH measurement’ column so that it contains
+only 1 numeric entry.<br />
+4. The Load script does some data checking and generates an excel table
+listing wetlands that appear more than once in the data and where field
+and stressor entries are blank in the survey 123 data.</p>
 </div>
 <div id="usage" class="section level3">
 <h3>Usage</h3>
-<p>There are a set of scripts that help load data from WESP Calculator
-excel spreadsheet and from the Survey 123 WESP protocol applicationn
-there are three basic sets of scripts:<br />
+<p>There are a set of scripts that help load data from the Survey 123
+WESP protocol application there are four basic sets of scripts:<br />
 Control scripts - set up the analysis environment;<br />
 Load scripts - loads excel and survey 123 data;<br />
 Clean scripts - cleans loaded data and generates a single EcoProvince
-data set;</p>
+data set; and<br />
+Analysis scripts - generates the wetland ecosystem scores for each
+wetland</p>
 <p>#Control Scripts:<br />
 run_all.R Sets local variables and directories used by scripts, presents
 script order.<br />
 header.R loads R packages, sets global directories, and attributes.</p>
-<p>#Load and Clean Batch Calculator:<br />
-Load_BatchCalculator.R<br />
-#Flat file clean<br />
-Clean_BatchCalculator_Flat.R<br />
-#Individual cleans for making embeded list data structure<br />
-Clean_BatchCalculator_Field.R<br />
-Clean_BatchCalculator_Office.R<br />
-Clean_BatchCalculator_Stressor.R</p>
 <p>#Loading and cleaning Survey 123<br />
 Load_Survey123.R<br />
-Clean_Survey123_Function.R<br />
-Clean_Survey123_Stressor.R</p>
+Clean_Survey123_Field.R<br />
+Clean_Survey123_Stressor.R<br />
+#Collating field, stressor and office data and preparing for ecosystem
+services calculations<br />
+Clean_Collate_F_S_O.R</p>
+<p>#Analysis Script - runs the wespR package against the data
+calculating wesp scores for each wetland<br />
+Analysis_wespR.R</p>
 </div>
 <div id="project-status" class="section level3">
 <h3>Project Status</h3>

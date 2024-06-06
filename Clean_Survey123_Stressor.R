@@ -15,7 +15,12 @@ WFormS<-read_excel(file.path(dataOutDir,paste('WFormIn.xlsx',sep='')),
                    col_names=TRUE, col_types=c('text')) %>%
   dplyr::select(Wetland_Co,
                 starts_with('S')) %>%
-  mutate(across(everything(), as.character))
+  mutate(across(everything(), as.character)) %>%
+  #drop duplicate rows
+  distinct(Wetland_Co, .keep_all = TRUE)
+
+WForm_Wetland_Co<-WFormS %>%
+  dplyr::select(Wetland_Co)
 
 #Make list of variables that require parsing
 #S1 S1_3
@@ -58,7 +63,8 @@ df3tt<-df3[[1]]
 #  dplyr::select(-c)
 
 #Combine generated form sub-variables with original data.frame
-WFormS2 <- cbind(WFormS,(do.call(cbind, df3))) %>%
+WFormS2.1<-cbind(WForm_Wetland_Co,do.call(cbind, df3))
+WFormS2 <- dplyr::mutate(WFormS,WFormS2.1) %>%
   mutate(across(everything(), as.character))
 
 WFormS2Check<-WFormS2 %>%
@@ -72,9 +78,24 @@ WFormS3<-WFormS2 %>%
   mutate(across(all_of(ParseVars), parse_number)) %>%
   mutate(across(everything(), as.character)) %>%
   dplyr::select(Wetland_Co,
-                S1, starts_with('S1_'),S2, starts_with('S2_'),
-                S3, starts_with('S3_'),S4, starts_with('S4_'),
-                S5, starts_with('S5_'),S6, starts_with('S6_'))
+                starts_with('S1_'),starts_with('S2_'),
+                starts_with('S3_'),starts_with('S4_'),
+                starts_with('S5_'),starts_with('S6_')) %>%
+  mutate(S1_15=0) %>%
+  mutate(S1_16=0) %>%
+  mutate(S2_8=0) %>%
+  mutate(S2_9=0) %>%
+  mutate(S2_10=0) %>%
+  mutate(S3_13=0) %>%
+  mutate(S3_14=0) %>%
+  mutate(S4_13=0) %>%
+  mutate(S4_14=0) %>%
+  mutate(S5_13=0) %>%
+  mutate(S5_14=0) %>%
+  mutate(S6_5=0) %>%
+  mutate(S6_6=0)
+WFormS3[is.na(WFormS3)] <- '0'
+
 StressCols<-colnames(WFormS3)
 
 WFormS3Check<-WFormS3 %>%
@@ -83,39 +104,3 @@ WFormS3Check<-WFormS3 %>%
 WriteXLS(WFormS3,file.path(dataOutDir,paste('WFormS3.xlsx',sep='')),
          row.names=FALSE,col.names=TRUE,AllText=TRUE)
 
-#Cast data into same data structure as Batch Calculator
-#Select each wetland, then each question and create a 3 dimension table - resulting in a list of wetland,
-# with a data frame of question and sub-questions
-#Field case
-nQs<-6
-Qlist<-c(paste0('S',(1:(nQs)),'_'))
-max_length<-14 #maximum number of sub-questions
-wetName123<-WFormS3$Wetland_Co
-#Loop through each wetland
-wetSS123<-lapply(1:length(wetName123), function(y) {
-  #Single wetland
-  wet1<-as.data.frame(t(rbind(names(WFormS3[y,]),WFormS3[y,])),stringsAsFactors=F)
-  colnames(wet1)<-c('F_Question',wet1[1,2])
-  wet1a<-wet1[-1,]
-  wet1<-wet1a[gtools::mixedorder(wet1a$F_Question),]
-  rownames(wet1)<-1:nrow(wet1)
-  #make each question it's own list
-  wet1Q<-lapply(1:length(Qlist), function(x) {
-    df1<-wet1 %>%
-      dplyr::filter(str_detect(F_Question, Qlist[x])) %>%
-      replace(is.na(.), 0)
-    wetP<-df1[[2]]
-    #changed from index of 2 to 1 since no F#_0s in survey 123 vs load from Batch
-    df2<- data.frame(c(wetP[1:length(wetP)],rep(NA,max_length - length(wetP))))
-    names(df2)[1]<-strsplit(df1$F_Question[[1]], "[_]")[[1]][1]
-    print(x)
-    return(df2)
-  })
-
-  #Combine all the questions for a single wetland
-  df3<-do.call(cbind, wet1Q)
-})
-#Name each list element (wetland)
-names(wetSS123)<-wetName123
-
-wetSS123Check<-wetSS123[["ESI-32955"]] #Batch ID 13
