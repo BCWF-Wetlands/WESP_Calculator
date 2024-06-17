@@ -60,6 +60,7 @@ wespRaw<-wespFn.1 %>%
   mutate(site=as.numeric(rownames(.)), .before=1) %>%
   replace(is.na(.),0)
 
+
 #Calculate Jenks breaks and add to data.frame
 #First normalize the service and add to data.frame
 #Min-Max normalization function
@@ -75,25 +76,33 @@ colnames(wespNorm)<-c('site',paste0(wespServices,'Norm'))
 # use BAMMtools' getJenksBreaks function
 library('BAMMtools')
 
-wesp_breaksL <- lapply(2:(nServices+1), function(x) {
-      jen_breaks<-getJenksBreaks(wespNorm[[x]], 3, subset = NULL)
+wesp_breaksL.1 <- lapply(2:(nServices+1), function(x) {
+      jen_breaks<-getJenksBreaks(wespNorm[[x]], 4, subset = NULL)
       .bincode(wespNorm[[x]], jen_breaks,include.lowest=TRUE)
       })
+#Change numeric to character High, Medium, Low
+wesp_breaksL<- lapply(wesp_breaksL.1[1:(nServices+1)], function(x) case_when(
+  x ==1 ~ 'L',
+  x ==2  ~ 'M',
+  x ==3  ~ 'H'
+))
+#Change list to data frame
 wespBreaks<-as.data.frame(do.call(cbind, wesp_breaksL)) %>%
   mutate(site=as.numeric(rownames(.)), .before=1)
 colnames(wespBreaks)<-c('site',paste0(wespServices,'Jenks'))
 
 #Make a single data frame that includes the raw, normalized and Jenks values
-wespEcoS<-list(wespRaw, wespNorm, wespBreaks) %>%
+wespEcoS.1<-list(wespRaw, wespNorm, wespBreaks) %>%
   purrr::reduce(full_join, by='site') %>%
   dplyr::select(site,sort(names(.)))
+wespEcoS<-data.frame(Wetland_Co=wetLUT,wespEcoS.1)
 
 #Write out the data frame
 WriteXLS(wespEcoS,file.path(dataOutDir,paste('wespEcoS.xlsx',sep='')),
          row.names=FALSE,col.names=TRUE,AllText=TRUE)
 
 
-##testing with Paul's batch spreadsheet raw values for comparison
+###### testing with Paul's batch spreadsheet raw values for comparison
 JenksWS<-read_excel(file.path(DataDir,paste('JenksWS.xlsx',sep='')),
                   col_names=TRUE, col_types=c('text'),
                   sheet='SFTS')
