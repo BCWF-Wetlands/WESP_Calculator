@@ -77,7 +77,7 @@ WForm1.check<-WForm1 %>%
 # Make list of variables that require parsing
 ParseVars<-c('F3_0','F56_0','F57_0','F58_0')
 #Number of sub-categories for each variable
-NparseVars<-c(8,3,6,11)
+NparseVars<-c(8,3,7,11)
 
 #Function to split a Form variable that has multiple entries into
 #separate variables

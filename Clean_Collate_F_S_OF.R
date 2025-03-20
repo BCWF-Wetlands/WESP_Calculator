@@ -27,7 +27,7 @@ OF_Answers.data<-read_xlsx(file.path(OFDataDir,'OF_Answers.data.xlsx')) %>%
   dplyr::filter(Wetland_Co %in% Fn$Wetland_Co)
 
 OF_Answers.data.Check<-OF_Answers.data %>%
-  dplyr::select(Wetland_Co, c(paste0('OF30_',(1:3))))
+  dplyr::select(Wetland_Co, c(paste0('OF24_',(1:4))))
 
 #Combine field, stressors, and office question data
 wespF<-list(Fn,OF_Answers.data,Stress)
@@ -35,13 +35,16 @@ wespF<-list(Fn,OF_Answers.data,Stress)
 wesp.1<-wespF %>% purrr::reduce(full_join, by='Wetland_Co') %>%
   select(-contains("_0"))
 wetLUT<-wesp.1$Wetland_Co
+saveRDS(wetLUT,file='tmp/wetLUT')
+
 
 wesp.1.check<-wesp.1 %>%
   dplyr::select(Wetland_Co, c(paste0('OF36_',(1:4))))
 
-wesp.2<-wesp.1 %>%
-  dplyr::select(-c(Wetland_Co))
-
+wesp.2<-wesp.1 #%>%
+  #dplyr::select(-c(Wetland_Co))
+#wesp.sites<-wesp.1 %>%
+#  dplry::select(Wetland_Co))
 #Transpose and format the data to wespR format and export
 wesp.3<-as.data.frame(t(wesp.2))
 rownames(wesp.3) <- colnames(wesp.2)
