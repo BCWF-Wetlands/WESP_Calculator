@@ -11,8 +11,9 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 #Read in loaded Survey 123 data
-WFormS<-read_excel(file.path(dataOutDir,paste('WFormIn.xlsx',sep='')),
-                   col_names=TRUE, col_types=c('text')) %>%
+#WFormS<-read_excel(file.path(dataOutDir,paste('WFormIn.xlsx',sep='')),
+WFormS<-read_excel(file.path(dataOutDir,paste('wesp_FormIn.xlsx',sep='')),
+                                      col_names=TRUE, col_types=c('text')) %>%
   dplyr::select(Wetland_Co,
                 starts_with('S')) %>%
   mutate(across(everything(), as.character)) %>%

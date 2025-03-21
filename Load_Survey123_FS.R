@@ -10,15 +10,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-file_123<-'WESP_22_23_Reordered Survey123 (03.19)_rowFix-3.xlsx'
-WetPlotFnDataIn<-read_xlsx(file.path(DataDir,file_123),sheet=2,
-                           col_names=TRUE, col_types=c('text')) %>%
+#file_123<-'WESP_22_23_Reordered Survey123 (03.19)_rowFix-3.xlsx'
+
+file_123<-'fix2_S123_acd367755e4e416babe7e5cb6af9e5b3_gdb_tocsv.xls'
+sheet_pos<-1
+cTypes<-c(rep("text",2),'date',rep('text',117))
+
+WetPlotFnDataIn<-read_xls(file.path(DataDir,file_123),sheet=sheet_pos,
+                           col_names=TRUE, col_types=cTypes) %>%
   dplyr::filter(region==EcoP) %>%
+  mutate(date=format(as.POSIXct(datetime,format='%m/%d/%Y %H:%M:%S'),format='%m/%d/%Y')) %>%
   dplyr::rename(Wetland_Co=Wetland_ID)
 
 SWetList<-c(paste0('X',(1:(nrow(WetPlotFnDataIn)))))
 
-WriteXLS(WetPlotFnDataIn,file.path(dataOutDir,paste('wesp_FormIn-2.xlsx',sep='')),
+WriteXLS(WetPlotFnDataIn,file.path(dataOutDir,paste('wesp_FormIn.xlsx',sep='')),
          row.names=FALSE,col.names=TRUE,AllText=TRUE)
 
 #Data Check
@@ -28,7 +34,8 @@ Duplicate_Wetland_Co<-data.frame(Duplicates=WetPlotFnDataIn[duplicated(WetPlotFn
 #Missing fields check
 WetPlotFnDataIn_F_S<-WetPlotFnDataIn %>%
   dplyr::select(Wetland_Co,starts_with(c('F','S'))) %>%
-  dplyr::select(-c('F46_a','F46_b','FID','surveyors',"Sec_Lnd_CO","Sec_Dist","SAR observed"))
+  #dplyr::select(-c('F46_a','F46_b','FID','surveyors',"Sec_Lnd_CO","Sec_Dist","SAR observed"))
+dplyr::select(-c('F46_a','surveyors'))
 
 nQuestions<-ncol(WetPlotFnDataIn_F_S)-1
 

@@ -50,7 +50,6 @@ WForm_Wetland_Co<-WForm %>%
 #F56,57,59 - NA
 #F58 - SpeciesPres11 and SpeciesPres8=SpeciesPres8, but if blank then NA
 
-
 #Case 1
 # Split F2 into c(F2_A1, F2_A2, F2_B1, F2_B2)
 WForm1 <- WForm %>% mutate(
@@ -141,20 +140,23 @@ WForm3.1<-cbind(WForm_Wetland_Co,do.call(cbind, df4))
 WForm3 <- dplyr::mutate(WForm2,WForm3.1)
 
 WForm3Check<-WForm3 %>%
-  dplyr::select(Wetland_Co,F22_1,F23_1,F42_1,F49_1,F4_0, c(paste0('F4_',(1:3))))
-  #dplyr::select(Wetland_Co,F41_0, c(paste0('F41_',(1:4))))
+  dplyr::select(Wetland_Co,F22_0,F23_0,F42_0,F49_0,F4_0, c(paste0('F4_',(1:3))))
+  #dplyr::select(Wetland_Co,F22_1,F23_1,F42_1,F49_1,F4_0, c(paste0('F4_',(1:3))))
+#dplyr::select(Wetland_Co,F41_0, c(paste0('F41_',(1:4))))
 #dplyr::select(Wetland_Co,F4_0, c(paste0('F4_',(1:3))))
 
 #Case 4
 # Modify y/n to 1/0 and set
 WForm4.1<-WForm3 %>%
-  mutate(across(c(F22_1,F23_1,F42_1,F49_1), ~ case_when(. == "yes" ~ "1", TRUE ~ "0"))) %>%
+  #mutate(across(c(F22_1,F23_1,F42_1,F49_1), ~ case_when(. == "yes" ~ "1", TRUE ~ "0"))) %>%
+  mutate(across(c(F22_0,F23_0,F42_0,F49_0), ~ case_when(. == "yes" ~ "1", TRUE ~ "0"))) %>%
   #mutate(F23_1 = F23_0) %>%
   #mutate(F42_1 = F42_0) %>%
   #mutate(F59_1 = F59_0) %>%
   mutate(F2_A0=0) %>%
   mutate(F2_B0=0) %>%
-  dplyr::select(-c('FID','F46_a','F46_b')) %>%
+  #dplyr::select(-c('FID','F46_a','F46_b')) %>%
+  dplyr::select(-c('F46_a')) %>%
   #drop columns to make wespR work - new entry
   dplyr::select(-c('F58_11')) #%>%
   #mutate(F51_3=if_else(F51_0==0,1,F51_3)) %>%
@@ -164,7 +166,8 @@ WForm4.1<-WForm3 %>%
 #mutate(F27_6=if_else((c(paste0('F27_',(1:6)))==0),1,F27_6)) # 6 subcases
 
 WForm4Check<-WForm4.1 %>%
-  dplyr::select(Wetland_Co,F22_1,F23_1,F42_1,F49_1,F4_0, c(paste0('F4_',(1:3))),F17_0,, c(paste0('F17_',(1:5))))
+  #dplyr::select(Wetland_Co,F22_1,F23_1,F42_1,F49_1,F4_0, c(paste0('F4_',(1:3))),F17_0,, c(paste0('F17_',(1:5))))
+  dplyr::select(Wetland_Co,F22_0,F23_0,F42_0,F49_0,F4_0, c(paste0('F4_',(1:3))),F17_0,, c(paste0('F17_',(1:5))))
 
 #Special default cases, default to a specific (not 1) case
 specialCaseMissing<-c('F27','F33','F35','F38','F39','F40','F53','F55')

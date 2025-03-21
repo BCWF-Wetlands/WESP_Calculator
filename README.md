@@ -10,10 +10,11 @@ WESP - Wetland Ecosystem Services Protocol
 ### Data
 
 Some modifications are required to make the Survey 123 form output, which is in csv, more machine readable and cleaner, they are as follows:  
-1. Fix the date field in excel by creating a new field with a text date (eg =TEXT(D3,"d/m/yy")).  
+1. Fix the date field in excel by creating a new field with a text date (eg =TEXT(D3,"d/m/yy")). Check that dates are valid. 
 2. Check the 'Region' column and ensure consistent assignment of Region - this is used for selecting data and only EcoProvince abbreviations are acceptable (currently: GD, CM, SIM, BP, TP, SB, SI). The Wetland_Co column and investigator columns can be used to confirm Region assignment.  
 3. Clean up the 'ph column'pH measurement' column so that it contains only 1 numeric entry.  
 4. The Load script does some data checking and generates an excel table listing wetlands that appear more than once in the data and where field and stressor entries are blank in the survey 123 data.
+5. Check if spreadsheet is multi-tab, update Load_Survey123.R  to read correct tab if not in first position
 
 ### Usage
 
