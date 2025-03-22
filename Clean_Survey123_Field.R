@@ -122,7 +122,7 @@ ParseVars<-c('F4_0','F5_0','F6_0','F7_0','F8_0','F9_0','F10_0','F11_0','F12_0','
              'F36_0','F37_0','F38_0','F39_0','F40_0','F41_0', 'F43_0','F44_0','F45_0','F47_0','F48_0',
              'F50_0','F51_0','F52_0','F53_0','F54_0','F55_0','F59_0')
 #Number of sub-categories for each variable
-NparseVars<-c(3,5,5,5,3,4,5,5,4,5,
+NparseVars<-c(4,5,5,5,3,4,5,5,4,5,
               5,5,5,5,3,6,5,6,5,5,
               5,6,3,6,6,6,6,6,6,4,
               5,6,3,4,5,4,5,4,3,3,3,
@@ -140,7 +140,7 @@ WForm3.1<-cbind(WForm_Wetland_Co,do.call(cbind, df4))
 WForm3 <- dplyr::mutate(WForm2,WForm3.1)
 
 WForm3Check<-WForm3 %>%
-  dplyr::select(Wetland_Co,F22_0,F23_0,F42_0,F49_0,F4_0, c(paste0('F4_',(1:3))))
+  dplyr::select(Wetland_Co,F22_0,F23_0,F42_0,F49_0,F4_0, c(paste0('F4_',(1:4))))
   #dplyr::select(Wetland_Co,F22_1,F23_1,F42_1,F49_1,F4_0, c(paste0('F4_',(1:3))))
 #dplyr::select(Wetland_Co,F41_0, c(paste0('F41_',(1:4))))
 #dplyr::select(Wetland_Co,F4_0, c(paste0('F4_',(1:3))))
