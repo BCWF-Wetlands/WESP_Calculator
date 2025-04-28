@@ -22,7 +22,7 @@ There is a single script Analysis_wespR.R that reads the field and office questi
 
 Enter the EcoProvince abbreviation (GD, SIM, CI, etc)  
 
-Identify if it is a Single or Reference site 
+Identify if it is a Single or Reference site (Single or Ref)
 
 Enter the location and name of the survey 123 xlsx file (without extension), for example 'data/field_survey123_edited_04.14.2025'  
 
