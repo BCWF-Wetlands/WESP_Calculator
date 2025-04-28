@@ -22,11 +22,11 @@ There is a single script Analysis_wespR.R that reads the field and office questi
 
 Enter the abbrevaited EcoProvince (GD, SIM, CI, etc)  
 
-Identify if it is a Single or Reference site  
+Identify if it is a Single or Reference site 
 
-Enter the location and name of the survey 123 file, for example 'data/field_survey123_edited_04.14.2025'  
+Enter the location and name of the survey 123 file (without extension), for example 'data/field_survey123_edited_04.14.2025'  
 
-Enter the location and name of the manual questions spreadsheet, for example - '../WESP_OF/out/data/GD_Base/GD_BaseOF_Answers.data' 
+Enter the location and name of the manual questions spreadsheet (without extension), for example - '../WESP_OF/out/data/GD_Base/GD_BaseOF_Answers.data' 
 
 ### Project Status
 
