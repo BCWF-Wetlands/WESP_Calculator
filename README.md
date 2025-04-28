@@ -9,7 +9,7 @@ WESP - Wetland Ecosystem Services Protocol
 
 ### Data
 
-Some modifications are required to make the Survey 123 form output, which is in csv, more machine readable and cleaner, they are as follows:  
+Some modifications may be required to make the Survey 123 form output, which is in csv, more machine readable and cleaner, they are as follows:  
 1. Fix the date field in excel by creating a new field with a text date (eg =TEXT(D3,"d/m/yy")). Check that dates are valid. 
 2. Check the 'Region' column and ensure consistent assignment of Region - this is used for selecting data and only EcoProvince abbreviations are acceptable (currently: GD, CM, SIM, BP, TP, SB, SI). The Wetland_Co column and investigator columns can be used to confirm Region assignment.  
 3. Clean up the 'ph column'pH measurement' column so that it contains only 1 numeric entry.  
@@ -18,25 +18,15 @@ Some modifications are required to make the Survey 123 form output, which is in 
 
 ### Usage
 
-There are a set of scripts that help load data from the Survey 123 WESP protocol application there are four basic sets of scripts:    
-Control scripts - set up the analysis environment;   
-Load scripts - loads excel and survey 123 data;   
-Clean scripts - cleans loaded data and generates a single EcoProvince data set; and   
-Analysis scripts - generates the wetland ecosystem scores for each wetland
+There is a single script Analysis_wespR.R that reads the field and office questions and generates the wetland ecosystem scores for each wetland.  
 
-#Control Scripts:   
-run_all.R	Sets local variables and directories used by scripts, presents script order.  
-header.R	loads R packages, sets global directories, and attributes.
+Enter the abbrevaited EcoProvince (GD, SIM, CI, etc)  
 
-#Loading and cleaning Survey 123  
-Load_Survey123.R  
-Clean_Survey123_Field.R   
-Clean_Survey123_Stressor.R   
-#Collating field, stressor and office data and preparing for ecosystem services calculations   
-Clean_Collate_F_S_O.R   
+Identify if it is a Single or Reference site  
 
-#Analysis Script - runs the wespR package against the data calculating wesp scores for each wetland   
-Analysis_wespR.R   
+Enter the location and name of the survey 123 file, for example 'data/field_survey123_edited_04.14.2025'  
+
+Enter the location and name of the manual questions spreadsheet, for example - '../WESP_OF/out/data/GD_Base/GD_BaseOF_Answers.data' 
 
 ### Project Status
 

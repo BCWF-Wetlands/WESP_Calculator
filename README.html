@@ -363,13 +363,13 @@ to maintain and monitor wetlands across British Columbia. <a href="https://bcwf.
 <p>WESP - Wetland Ecosystem Services Protocol</p>
 <div id="data" class="section level3">
 <h3>Data</h3>
-<p>Some modifications are required to make the Survey 123 form output,
-which is in csv, more machine readable and cleaner, they are as
+<p>Some modifications may be required to make the Survey 123 form
+output, which is in csv, more machine readable and cleaner, they are as
 follows:<br />
 1. Fix the date field in excel by creating a new field with a text date
-(eg =TEXT(D3,“d/m/yy”)).<br />
-2. Check the ‘Region’ column and ensure consistent assignment of Region
-- this is used for selecting data and only EcoProvince abbreviations are
+(eg =TEXT(D3,“d/m/yy”)). Check that dates are valid. 2. Check the
+‘Region’ column and ensure consistent assignment of Region - this is
+used for selecting data and only EcoProvince abbreviations are
 acceptable (currently: GD, CM, SIM, BP, TP, SB, SI). The Wetland_Co
 column and investigator columns can be used to confirm Region
 assignment.<br />
@@ -377,32 +377,21 @@ assignment.<br />
 only 1 numeric entry.<br />
 4. The Load script does some data checking and generates an excel table
 listing wetlands that appear more than once in the data and where field
-and stressor entries are blank in the survey 123 data.</p>
+and stressor entries are blank in the survey 123 data. 5. Check if
+spreadsheet is multi-tab, update Load_Survey123.R to read correct tab if
+not in first position</p>
 </div>
 <div id="usage" class="section level3">
 <h3>Usage</h3>
-<p>There are a set of scripts that help load data from the Survey 123
-WESP protocol application there are four basic sets of scripts:<br />
-Control scripts - set up the analysis environment;<br />
-Load scripts - loads excel and survey 123 data;<br />
-Clean scripts - cleans loaded data and generates a single EcoProvince
-data set; and<br />
-Analysis scripts - generates the wetland ecosystem scores for each
-wetland</p>
-<p>#Control Scripts:<br />
-run_all.R Sets local variables and directories used by scripts, presents
-script order.<br />
-header.R loads R packages, sets global directories, and attributes.</p>
-<p>#Loading and cleaning Survey 123<br />
-Load_Survey123.R<br />
-Clean_Survey123_Field.R<br />
-Clean_Survey123_Stressor.R<br />
-#Collating field, stressor and office data and preparing for ecosystem
-services calculations<br />
-Clean_Collate_F_S_O.R</p>
-<p>#Analysis Script - runs the wespR package against the data
-calculating wesp scores for each wetland<br />
-Analysis_wespR.R</p>
+<p>There is a single script Analysis_wespR.R that reads the field and
+office questions and generates the wetland ecosystem scores for each
+wetland.</p>
+<p>Enter the abbrevaited EcoProvince (GD, SIM, CI, etc)</p>
+<p>Identify if it is a Single or Reference site</p>
+<p>Enter the location and name of the survey 123 file, for example
+‘data/field_survey123_edited_04.14.2025’</p>
+<p>Enter the location and name of the manual questions spreadsheet, for
+example - ‘../WESP_OF/out/data/GD_Base/GD_BaseOF_Answers.data’</p>
 </div>
 <div id="project-status" class="section level3">
 <h3>Project Status</h3>
