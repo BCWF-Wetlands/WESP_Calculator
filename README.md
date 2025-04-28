@@ -20,7 +20,7 @@ Some modifications may be required to make the Survey 123 form output, which is 
 
 There is a single script Analysis_wespR.R that reads the field and office questions and generates the wetland ecosystem scores for each wetland.  
 
-Enter the abbrevaited EcoProvince (GD, SIM, CI, etc)  
+Enter the EcoProvince abbreviation (GD, SIM, CI, etc)  
 
 Identify if it is a Single or Reference site 
 
