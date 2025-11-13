@@ -12,7 +12,7 @@
 
 #Set up the enviornment for processing the field and office files
 #Set the EcoProvince name.
-EcoP<-'SIM'
+EcoP<-'GD'
 #Single or Reference site
 #enter the layer name desired at the prompt
 SiteType<-readline(prompt='Enter run type (Ref or Single): ')
@@ -21,8 +21,8 @@ SiteType<-readline(prompt='Enter run type (Ref or Single): ')
 file_123in<-readline(prompt='Survey 123 file location and name (without extension) e.g. ./data/field_survey123_edited_04.14.2025: ')
 file_123<-paste0(file_123in,'.xls')
 #file_123<-field_survey123_edited_04.14.2025.xls
-Office_file_loc_in<-readline(prompt='Office question file location and name (without extension) e.g. ../WESP_OF/out/data/GD_BaseOF_Answers.data')
-Office_file_loc<-file.path(Office_file_loc_in,'.xlsx')
+Office_file_loc_in<-readline(prompt='Office question file location and name (without extension) e.g. ../WESP_OF/out/data/GD_Base/OF_Answers.data')
+Office_file_loc<-paste0(Office_file_loc_in,'.xlsx')
 
 ###########
 #Prepare for and install wespr
@@ -45,8 +45,10 @@ dir.create(file.path(dataOutDir), showWarnings = FALSE)
 #Set Date
 DateTimeStamp <- format(Sys.time(), format="%d_%B_%Y_%H_%M")
 
-field_data<-file.path(DataDir,file_123)
+field_data<-file_123
+#field_check<-read_xls(field_data) %>% dplyr::filter(region=='GD')
 office_data<-Office_file_loc
+#office_check<-read_xlsx(office_data)
 
 ww <- combine_rawdata(
   field_data <-  field_data ,
