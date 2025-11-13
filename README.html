@@ -386,12 +386,25 @@ not in first position</p>
 <p>There is a single script Analysis_wespR.R that reads the field and
 office questions and generates the wetland ecosystem scores for each
 wetland.</p>
-<p>Enter the abbrevaited EcoProvince (GD, SIM, CI, etc)</p>
-<p>Identify if it is a Single or Reference site</p>
-<p>Enter the location and name of the survey 123 file, for example
-‘data/field_survey123_edited_04.14.2025’</p>
-<p>Enter the location and name of the manual questions spreadsheet, for
-example - ‘../WESP_OF/out/data/GD_Base/GD_BaseOF_Answers.data’</p>
+<p>Enter the EcoProvince abbreviation (GD, SIM, CI, etc)</p>
+<p>Identify if it is a Single or Reference site (Single or Ref)</p>
+<p>Enter the location and name of the survey 123 xlsx file (without
+extension), for example ‘data/field_survey123_edited_04.14.2025’</p>
+<p>Enter the location and name of the manual questions xlsx spreadsheet
+(without extension), for example -
+‘../WESP_OF/out/data/GD_Base/GD_BaseOF_Answers.data’</p>
+<p>In addition, there are a series of scripts for processing WESP data,
+reading in field data, manual office data and automated office data,
+these include:<br />
+-Load Survey123 field data from file - Load_Survey123_Field.R<br />
+-Clean Survey123 field data - Clean_Survey123_Function.R”) and
+Clean_Survey123_Stressor.R<br />
+-Load manual office data and clean - Load_Survey123_M_OF.R and
+Clean_Survey123_M_OF.R<br />
+-Collate function, stressor, manual data with automated Office Data -
+Clean_Collate_F_S_OF.R”)<br />
+-Other - reading pre-compiled excel based batch calculator -
+Load_BatchCalculator.R</p>
 </div>
 <div id="project-status" class="section level3">
 <h3>Project Status</h3>

@@ -18,6 +18,7 @@ Some modifications may be required to make the Survey 123 form output, which is 
 
 ### Usage
 
+
 There is a single script Analysis_wespR.R that reads the field and office questions and generates the wetland ecosystem scores for each wetland.  
 
 Enter the EcoProvince abbreviation (GD, SIM, CI, etc)  
@@ -27,6 +28,13 @@ Identify if it is a Single or Reference site (Single or Ref)
 Enter the location and name of the survey 123 xlsx file (without extension), for example 'data/field_survey123_edited_04.14.2025'  
 
 Enter the location and name of the manual questions xlsx spreadsheet (without extension), for example - '../WESP_OF/out/data/GD_Base/GD_BaseOF_Answers.data' 
+
+In addition, there are a series of scripts for processing WESP data, reading in field data, manual office data and automated office data, these include:  
+-Load Survey123 field data from file - Load_Survey123_Field.R  
+-Clean Survey123 field data - Clean_Survey123_Function.R and Clean_Survey123_Stressor.R  
+-Load manual office data and clean - Load_Survey123_M_OF.R and Clean_Survey123_M_OF.R  
+-Collate function, stressor, manual data with automated Office Data - Clean_Collate_F_S_OF.R")  
+-Other - reading pre-compiled excel based batch calculator - Load_BatchCalculator.R  
 
 ### Project Status
 
