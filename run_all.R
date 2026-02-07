@@ -61,7 +61,9 @@ source("Clean_Survey123_M_OF.R")
 #Collate function, stressor, manual data with automated Office Data
 source("Clean_Collate_F_S_OF.R")
 
-#Run wespR on data, normalize scores and run Jenks breaks
+#Run wespR on data, normalize scores and run Jenks breaks for reference data
+source('Analysis_wespR_Ref.R')
+#Code for prepearing raw files for wespr - best for single sites - requires further testing
 source('Analysis_wespR.R')
 
 #Other - reading pre-compiled excel based batch calculator
