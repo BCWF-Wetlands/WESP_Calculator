@@ -18,7 +18,11 @@ WFormS<-read_excel(file.path(dataOutDir,paste('wesp_FormIn.xlsx',sep='')),
                 starts_with('S')) %>%
   mutate(across(everything(), as.character)) %>%
   #drop duplicate rows
-  distinct(Wetland_Co, .keep_all = TRUE)
+  distinct(Wetland_Co, .keep_all = TRUE) %>%
+  #Due to parsing, need to re-organize some stressor column names
+  #Temporarily name them S7 and S8 so parse routine works
+  rename(S6_5=S6_3) %>%
+  rename(S6_6=S6_4)
 
 WForm_Wetland_Co<-WFormS %>%
   dplyr::select(Wetland_Co)
@@ -28,7 +32,7 @@ WForm_Wetland_Co<-WFormS %>%
 ParseVars<-c('S1','S2','S3','S4','S5','S6')
 #Number of sub-categories for each variable
 #NparseVars<-c(10,5,9,8,8,4)
-NparseVars<-c(10,5,9,9,8,4)
+NparseVars<-c(10,5,9,8,8,4)
 
 #Function to split a Form variable that has multiple entries into
 #separate variables
@@ -69,14 +73,14 @@ WFormS2 <- dplyr::mutate(WFormS,WFormS2.1) %>%
   mutate(across(everything(), as.character))
 
 WFormS2Check<-WFormS2 %>%
-  dplyr::select(Wetland_Co,c(paste0('S5_',(1:12))))
+  dplyr::select(Wetland_Co,S6,c(paste0('S6_',(1:6))))
 
 WFormS2Check<-WFormS2 %>%
   dplyr::select(Wetland_Co,starts_with('S6'))
 
 #Split out form binary variables that are contained in 1 variable
 ParseVars<-c('S1_11','S1_12','S1_13','S1_14','S2_6','S2_7','S2_8','S3_10','S3_11','S3_12',
-             'S4_10','S4_11','S4_12','S5_9','S5_10','S5_11','S5_12','S6_3','S6_4')
+             'S4_9','S4_10','S4_11','S4_12','S5_9','S5_10','S5_11','S5_12','S6_3','S6_4','S6_5','S6_6')
 
 WFormS3<-WFormS2 %>%
   mutate(across(all_of(ParseVars), parse_number)) %>%
@@ -85,19 +89,19 @@ WFormS3<-WFormS2 %>%
                 starts_with('S1_'),starts_with('S2_'),
                 starts_with('S3_'),starts_with('S4_'),
                 starts_with('S5_'),starts_with('S6_')) %>%
-  mutate(S1_15=0) %>%
-  mutate(S1_16=0) %>%
-  mutate(S2_8=0) %>%
-  mutate(S2_9=0) %>%
-  mutate(S2_10=0) %>%
-  mutate(S3_13=0) %>%
-  mutate(S3_14=0) %>%
-  mutate(S4_13=0) %>%
-  mutate(S4_14=0) %>%
-  mutate(S5_13=0) %>%
-  mutate(S5_14=0) %>%
-  mutate(S6_5=0) %>%
-  mutate(S6_6=0)
+ mutate(S1_15=0) %>%
+ mutate(S1_16=0) %>%
+# mutate(S2_8=0) %>%
+ mutate(S2_9=0) %>%
+ mutate(S2_10=0) %>%
+ mutate(S3_13=0) %>%
+ mutate(S3_14=0) %>%
+ mutate(S4_13=0) %>%
+ mutate(S4_14=0) %>%
+ mutate(S5_13=0) %>%
+ mutate(S5_14=0) %>%
+ mutate(S6_7=0) %>%
+ mutate(S6_8=0)
 WFormS3[is.na(WFormS3)] <- '0'
 
 StressCols<-colnames(WFormS3)

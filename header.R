@@ -14,6 +14,7 @@ dataOutDir <- file.path(OutDir,'data')
 DataDir <- file.path('data')
 
 wesprDir <- file.path('/Users/dmorgan/Sync/_dev/Water/WESP_Calculator/data')
+data_prepDir <- file.path('/Users/dmorgan/Sync/_dev/Water/WESP_data_prep/out/spatial')
 dir.create(file.path(OutDir), showWarnings = FALSE)
 dir.create(file.path(dataOutDir), showWarnings = FALSE)
 dir.create(DataDir, showWarnings = FALSE)

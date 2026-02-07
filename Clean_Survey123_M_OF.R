@@ -36,7 +36,7 @@ OF_manual<-WetPlotMOFDataIn %>%
   mutate(OF24_2=0) %>%
   mutate(OF24_3=0) %>%
   mutate(OF24_4=0) %>%
-  mutate(OF44_1=1) %>%
+  mutate(OF44_1=4) %>%
   mutate(OF44_2=0) %>%
   mutate(OF44_3=0) %>%
   mutate(OF44_4=0) %>%

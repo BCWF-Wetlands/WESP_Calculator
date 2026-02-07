@@ -19,8 +19,7 @@ WForm<-read_excel(file.path(dataOutDir,paste('wesp_FormIn.xlsx',sep='')),
   distinct(Wetland_Co, .keep_all = TRUE) %>%
   mutate(F46_2=F46_1) %>%
   #drop columns not currently used
-  dplyr::select(-c('F46_a',
-                   'F58_A','F58_B','F58_C','F58_D','F58_E','F58_F'))
+  dplyr::select(-c('F58_A','F58_B','F58_C','F58_D','F58_E','F58_F'))
 
 WForm_Wetland_Co<-WForm %>%
   dplyr::select(Wetland_Co)
@@ -55,14 +54,20 @@ WForm_Wetland_Co<-WForm %>%
 #F58 - SpeciesPres11 and SpeciesPres8=SpeciesPres8, but if blank then NA
 
 #Case 1
-# Split F2 into c(F2_A1, F2_A2, F2_B1, F2_B2)
+# Split F2 into c(F2_A0,F2_A1, F2_A2, F2_B0, F2_B1, F2_B2)
 WForm1 <- WForm %>% mutate(
+  #F2_A0 := case_when(
+  # is.na(F2_0) ~ 1,
+  # TRUE ~ 0),
   F2_A1 := case_when(
     F2_0=="A1" ~ 1,
     TRUE ~ 0),
   F2_A2 := case_when(
     F2_0=="A2" ~ 1,
     TRUE ~ 0),
+  #F2_B0 := case_when(
+  #  is.na(F2_0) ~ 1,
+  # TRUE ~ 0),
   F2_B1 := case_when(
     F2_0=="B1" ~ 1,
     TRUE ~ 0),
@@ -71,9 +76,10 @@ WForm1 <- WForm %>% mutate(
     F2_0=="B2" ~ 1,
     TRUE ~ 0)
 ) #%>%
-  #dplyr::select(!(F2_0))
+#dplyr::select(!(F2_0))
 WForm1.check<-WForm1 %>%
-  dplyr::select(Wetland_Co,c(F2_0,F2_A1, F2_A2, F2_B1, F2_B2))
+  #dplyr::select(Wetland_Co,c(F2_0,F2_A0, F2_A1, F2_A2, F2_B0, F2_B1, F2_B2))
+  dplyr::select(Wetland_Co,c(F2_0, F2_A1, F2_A2, F2_B1, F2_B2))
 
 
 #Case 2
@@ -198,14 +204,16 @@ df6<-cbind(WForm_Wetland_Co,do.call(cbind,df5)) %>%
 WForm4<-WForm4.1 %>%
   dplyr::select(-c(paste0(c(MissCase),'_',MissValue))) %>%
   left_join(df6,by='Wetland_Co') %>%
-  select(-contains("_0")) #%>%
+  select(-contains("_0")) %>%
+  #Temp fix due to Survey 123 error
+  mutate(F59_1=ifelse(Wetland_Co=='SI_14040',1,F59_1))
   #mutate(F46b=F46_1)
 
 #Data Checking
 #tt<-WForm3[!(WForm3 %in% WForm4)]
 WForm4Check<-WForm4 %>%
-  #dplyr::select(Wetland_Co,F53_0,c(paste0('F53_',(1:6))))
-  dplyr::select(Wetland_Co,c(paste0('F4_',(1:3))))
+  dplyr::select(Wetland_Co,c(paste0('F59_',(1:5))))
+  #dplyr::select(Wetland_Co,'F59_1')
 
 #dplyr::select(Wetland_Co,F19_0,c(paste0('F19_',(1:6))),F19_2,F22_1, F22_1,F4_1, c(paste0('F4_',(1:3))))
 
